@@ -1,5 +1,3 @@
-from email.policy import default
-from statistics import mode
 from django.db import models
 from django.utils import timezone
 from django.utils.timezone import timedelta
@@ -41,7 +39,22 @@ class Order(models.Model):
 
     # overwrite the default save() method
     def save(self, *args, **kwargs) -> None:
+        assert self.book.quantity > 0
+        
         if not self.id: # if object does not exist in database yet
             self.expiry_date = self.issue_date + BOOK_HOLDING_TIME
 
+        # update quantity of this book available for rent
+        self.book.quantity -= 1
+        self.book.save()
+
         return super().save(*args, **kwargs)
+
+
+    # overwrite the default delete() method
+    def delete(self, *args, **kwargs):
+        # update quantity of this book available for rent
+        self.book.quantity += 1
+        self.book.save()
+
+        return super().delete(*args, **kwargs)
