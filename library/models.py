@@ -41,18 +41,19 @@ class Order(models.Model):
 
     # overwrite the default save() method
     def save(self, *args, **kwargs) -> None:
-        assert self.book.quantity > 0
         
         if not self.id: # if object does not exist in database yet
+            assert self.book.quantity > 0
+            
             self.expiry_date = self.issue_date + BOOK_HOLDING_TIME
 
-        # update quantity of this book available for rent
-        self.book.quantity -= 1
-        self.book.save()
+            # update quantity of this book available for rent
+            self.book.quantity -= 1
+            self.book.save()
 
-        # subtract from student's available purchasing credits
-        self.student.credits -= self.book.cost
-        self.student.save()
+            # subtract from student's available purchasing credits
+            self.student.credits -= self.book.cost
+            self.student.save()
 
         return super().save(*args, **kwargs)
 
