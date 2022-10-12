@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.utils import timezone
 from django.utils.timezone import timedelta
@@ -19,6 +20,7 @@ class Book(models.Model):
 
 class Student(models.Model):
     name = models.CharField(max_length=100)
+    credits = models.IntegerField(default=500)
 
     def __str__(self) -> str:
         return self.name
@@ -47,6 +49,10 @@ class Order(models.Model):
         # update quantity of this book available for rent
         self.book.quantity -= 1
         self.book.save()
+
+        # subtract from student's available purchasing credits
+        self.student.credits -= self.book.cost
+        self.student.save()
 
         return super().save(*args, **kwargs)
 
