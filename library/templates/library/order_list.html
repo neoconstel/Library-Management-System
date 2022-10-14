@@ -14,7 +14,7 @@
 {% for order in orders %}
 <div class="book">
     <h6>{{ order.book.title}}</h6>
-    <p>(by {{ order.book.author }} )</p>
+    <p>(by {{ order.book.author }})</p>
     <p>Book ID: {{ order.book.id }}</p>
     <p>Currently with: {{ order.student.name }} </p>
     <p>Student ID: {{order.student.id}}</p>

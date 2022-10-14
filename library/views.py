@@ -35,6 +35,7 @@ class AdminPortal(ListView):
     model = Book
     template_name = 'library/admin_portal.html'
     context_object_name = 'books'
+    ordering = ['-id']
 
 
 class ViewOrders(ListView):
