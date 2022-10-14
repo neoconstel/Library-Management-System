@@ -13,8 +13,11 @@
 <hr>
 {% for order in orders %}
 <div class="book">
-    <h3>{{ order.book.title}}</h3>
-    <p>Currently with: {{ order.student.name }}</p>
+    <h6>{{ order.book.title}}</h6>
+    <p>(by {{ order.book.author }} )</p>
+    <p>Book ID: {{ order.book.id }}</p>
+    <p>Currently with: {{ order.student.name }} </p>
+    <p>Student ID: {{order.student.id}}</p>
     <p>Expires on: {{ order.expiry_date }}</p>
 </div>
 {% endfor %}
