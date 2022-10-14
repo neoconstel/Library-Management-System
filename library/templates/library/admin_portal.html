@@ -1,6 +1,23 @@
 {% extends 'library/base.html' %}
 
+{% block main-header %}
+{% endblock main-header %}
+{% block student-nav %}
+{% endblock student-nav %}
+
 {% block content %}
-<h1>Librarian Section</h1>
+<h6>Total number of book titles: {{ total_book_titles }}</h6>
+<h6>Most recent book: {{ books.last }}</h6>
+<h6>Books available for rent: {{ total_available_books }}</h6>
+<hr>
+
+<h3>Search</h3>
+
+<hr>
+{% for book in books %}
+<div class="book">
+    <p>{{book.id}}: {{book.title}}</p>
+</div>
+{% endfor %}
 
 {% endblock content %}

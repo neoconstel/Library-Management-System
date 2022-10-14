@@ -1,0 +1,21 @@
+{% extends 'library/base.html' %}
+
+{% block main-header %}
+{% endblock main-header %}
+{% block student-nav %}
+{% endblock student-nav %}
+
+{% block content %}
+<h2>Add Books</h2>
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.title.label }}{{ form.title }} <br>
+    {{ form.theme.label }}{{ form.theme }} <br>
+    {{ form.author.label }}{{ form.author }} <br>
+    {{ form.cost.label }}{{ form.cost }} <br>
+    {{ form.quantity.label }}{{ form.quantity }} <br>
+
+    <button type="submit">Confirm Add</button>
+
+</form>
+{% endblock content %}

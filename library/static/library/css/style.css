@@ -1,8 +1,16 @@
 body{
     background-color: skyblue;
+    text-align: center;
 }
 
 .main-header{
     height: 30vh;
     background-color: yellow;
 }
+
+.book{
+    background-color: lightslategray;
+    margin: 20px;
+    display: inline-block;
+}
+
