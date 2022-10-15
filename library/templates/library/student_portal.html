@@ -5,4 +5,17 @@
 
 {% block content %}
 
+<h3>Search</h3>
+<p>< searchbox here ></searchbox> </p>
+
+<hr>
+{% for book in books %}
+    {% if book.quantity > 0 %}
+        <div class="book">
+            <h6>{{book.title}}</h6>
+            <p>(by {{ book.author }})</p>
+        </div>
+    {% endif %}
+{% endfor %}
+
 {% endblock content %}
