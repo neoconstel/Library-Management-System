@@ -13,16 +13,6 @@ class Home(TemplateView):
     template_name = 'library/index.html'
 
 
-# def admin_portal(request):
-#     books = Book.objects.all() 
-#     context = {
-#          'books': books,
-#          'total_book_titles': books.count(),
-#          'total_available_books': sum([book.quantity for book in books])
-#     }
-#     return render(request, 'library/admin_portal.html', context=context)
-
-
 class AddBooks(CreateView):
     model = Book
     fields = '__all__'
