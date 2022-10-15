@@ -53,6 +53,19 @@ class AdminPortal(ListView):
             return self.model.objects.order_by(self.ordering).all()  # or None, depending on preference
 
 
+    def get_context_data(self, **kwargs):
+        # get the default data for editing
+        context = super().get_context_data(**kwargs)
+
+        # fetch our data and include it in default data
+        books = Book.objects.all()     
+        context['total_book_titles'] = books.count()
+        context['total_available_books'] = sum([book.quantity for book in books])
+
+        # return the modified data
+        return context
+
+
 class StudentPortal(ListView):
     model = Book
     template_name = 'library/student_portal.html'
