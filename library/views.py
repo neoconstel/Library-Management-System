@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.views.generic import TemplateView, CreateView, ListView
+from django.views.generic import (TemplateView, CreateView, ListView,
+DetailView, UpdateView, DeleteView)
 from django.urls import reverse_lazy
 from requests import request
 from django.db.models import Q  # for combining filter queries with &, |
@@ -13,10 +14,31 @@ class Home(TemplateView):
     template_name = 'library/index.html'
 
 
-class AddBooks(CreateView):
+class BookCreate(CreateView):
     model = Book
     fields = '__all__'
     success_url = reverse_lazy('admin-portal')
+
+
+class BookDetail(DetailView):
+    model = Book
+    fields = '__all__'
+    context_object_name = 'book'
+
+
+class BookUpdate(UpdateView):
+    model = Book
+    fields = '__all__'    
+
+    def get_success_url(self) -> str:
+        return reverse_lazy('view-books', kwargs={'pk': self.object.pk})
+
+
+class BookDelete(DeleteView):
+    model = Book
+    context_object_name = 'book'
+    success_url = reverse_lazy('admin-portal')
+
 
 
 class AdminPortal(ListView):
