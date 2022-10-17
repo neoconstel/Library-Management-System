@@ -4,7 +4,7 @@
 {% endblock student-nav %}
 
 {% block content %}
-<h2>Add Books</h2>
+<h2>{{form_mode}} Books</h2>
 <form method="post" action="">
     {% csrf_token %}
     {{ form.title.label }}{{ form.title }} <br>
@@ -13,7 +13,7 @@
     {{ form.cost.label }}{{ form.cost }} <br>
     {{ form.quantity.label }}{{ form.quantity }} <br>
 
-    <button type="submit">Confirm Add</button>
+    <button type="submit">Confirm {{form_mode}}</button>
 
 </form>
 {% endblock content %}

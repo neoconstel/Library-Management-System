@@ -25,6 +25,9 @@
     <p>(by {{ book.author }})</p>
     <p>Book ID: {{ book.id }}</p>
     <p>Number available: {{ book.quantity }}</p>
+    <a class="btn btn-primary" href="{% url 'view-books' book.id %}" role="button">View</a>
+    <a class="btn btn-primary" href="{% url 'update-books' book.id %}" role="button">Update</a>
+    <a class="btn btn-primary" href="{% url 'delete-books' book.id %}" role="button">Delete</a>
 </div>
 {% endfor %}
 

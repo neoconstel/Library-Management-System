@@ -19,6 +19,11 @@ class BookCreate(CreateView):
     fields = '__all__'
     success_url = reverse_lazy('admin-portal')
 
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        context['form_mode'] = 'Add'
+        return context
+
 
 class BookDetail(DetailView):
     model = Book
@@ -32,6 +37,11 @@ class BookUpdate(UpdateView):
 
     def get_success_url(self) -> str:
         return reverse_lazy('view-books', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        context['form_mode'] = 'Update'
+        return context
 
 
 class BookDelete(DeleteView):
