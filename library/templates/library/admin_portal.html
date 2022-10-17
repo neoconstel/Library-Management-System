@@ -6,6 +6,7 @@
 {% block content %}
 <div class="stats">
     <h6>Total number of book titles: {{ total_book_titles }}</h6>
+    <h6>Books rented out: {{ books_rented_out }}</h6>
     <h6>Books available for rent: {{ total_available_books }}</h6>
 </div>
 
@@ -24,7 +25,7 @@
     <h6>{{book.title}}</h6>
     <p>(by {{ book.author }})</p>
     <p>Book ID: {{ book.id }}</p>
-    <p>Number available: {{ book.quantity }}</p>
+    <p>{{ book.quantity }} Available</p>
     <a class="btn btn-primary" href="{% url 'view-books' book.id %}" role="button">View</a>
     <a class="btn btn-primary" href="{% url 'update-books' book.id %}" role="button">Update</a>
     <a class="btn btn-primary" href="{% url 'delete-books' book.id %}" role="button">Delete</a>

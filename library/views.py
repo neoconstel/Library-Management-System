@@ -82,6 +82,7 @@ class AdminPortal(ListView):
         # fetch our data and include it in default data
         books = Book.objects.all()     
         context['total_book_titles'] = books.count()
+        context['books_rented_out'] = Order.objects.count()
         context['total_available_books'] = sum([book.quantity for book in books])
 
         # return the modified data
