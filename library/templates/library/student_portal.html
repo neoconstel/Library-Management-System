@@ -5,17 +5,18 @@
 
 {% block content %}
 
-<h3>Search</h3>
-<p>< searchbox here ></searchbox> </p>
-
+<h3>Your Rented Collections</h3>
 <hr>
-{% for book in books %}
-    {% if book.quantity > 0 %}
-        <div class="book">
-            <h6>{{book.title}}</h6>
-            <p>(by {{ book.author }})</p>
-        </div>
-    {% endif %}
+
+{% for order in orders %}
+<div class="book">
+    <h6>{{ order.book.title}}</h6>
+    <p>(by {{ order.book.author }})</p>
+    <p>Book ID: {{ order.book.id }}</p>
+    <p>Expires on: {{ order.expiry_date }}</p>
+    <a class="btn btn-primary" href="{% url 'view-books' order.book.id %}" role="button">Read</a>
+    <a class="btn btn-primary" href="{% url 'delete-order' order.id %}" role="button">Return Book</a>
+</div>
 {% endfor %}
 
 {% endblock content %}

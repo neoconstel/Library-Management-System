@@ -1,0 +1,14 @@
+{% extends 'library/base.html' %}
+
+{% block admin-nav %}
+{% endblock admin-nav %}
+
+{% block content %}
+<form method="POST" action="">
+    {% csrf_token %}
+    <h2>Return Book: {{ order.book.title }}?</h2>
+    <button type="submit" class="btn btn-danger">Yes, Return!</button>
+    <button type="button" class="btn btn-secondary"><a href="{% url 'student-portal' %}">Cancel</a></button>
+    
+</form>
+{% endblock content %}

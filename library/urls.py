@@ -12,4 +12,5 @@ urlpatterns = [
 
 
     path('student/', views.StudentPortal.as_view(), name='student-portal'),
+    path('student/delete-order/<int:pk>/', views.OrderDelete.as_view(), name='delete-order')
 ]

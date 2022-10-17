@@ -90,9 +90,9 @@ class AdminPortal(ListView):
 
 
 class StudentPortal(ListView):
-    model = Book
+    model = Order
     template_name = 'library/student_portal.html'
-    context_object_name = 'books'
+    context_object_name = 'orders'
     ordering = ['-id']
 
 
@@ -100,5 +100,10 @@ class ViewOrders(ListView):
     model = Order
     context_object_name = 'orders'
 
+
+class OrderDelete(DeleteView):
+    model = Order
+    context_object_name = 'order'
+    success_url = reverse_lazy('student-portal')
 
 
