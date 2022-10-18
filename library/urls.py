@@ -12,5 +12,7 @@ urlpatterns = [
 
 
     path('student/', views.StudentPortal.as_view(), name='student-portal'),
-    path('student/delete-order/<int:pk>/', views.OrderDelete.as_view(), name='delete-order')
+    path('student/create-order/', views.OrderCreate.as_view(), name='create-order'),
+    path('student/delete-order/<int:pk>/', views.OrderDelete.as_view(), name='delete-order'),
+    path('student/student-library', views.StudentLibrary .as_view(), name='student-library')
 ]

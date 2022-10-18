@@ -1,12 +1,13 @@
+from distutils.command.build_scripts import first_line_re
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.generic import (TemplateView, CreateView, ListView,
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import (View, TemplateView, CreateView, ListView,
 DetailView, UpdateView, DeleteView)
 from django.urls import reverse_lazy
 from requests import request
 from django.db.models import Q  # for combining filter queries with &, |
 
-from .models import Book, Order
+from .models import Book, Order, Student
 from .forms import BookForm
 
 
@@ -53,7 +54,7 @@ class BookDelete(DeleteView):
 
 class AdminPortal(ListView):
     model = Book
-    template_name = 'library/admin_portal.html'
+    template_name = 'library/admin_library.html'
     context_object_name = 'books'
     ordering = '-id'
 
@@ -93,7 +94,7 @@ class StudentPortal(ListView):
     model = Order
     template_name = 'library/student_portal.html'
     context_object_name = 'orders'
-    ordering = ['-id']
+    ordering = ['-id']    
 
 
 class ViewOrders(ListView):
@@ -107,3 +108,20 @@ class OrderDelete(DeleteView):
     success_url = reverse_lazy('student-portal')
 
 
+class OrderCreate(View):
+
+    def post(request, *args, **kwargs):    
+        book_id = request.request.POST.get('book_id')
+        student_id = request.request.POST.get('student_id')
+        new_order = Order(
+            book = Book.objects.get(id=book_id),
+            student = Student.objects.get(id=student_id)
+        )
+        new_order.save()
+
+        # redirect back to page that made initial request
+        return HttpResponseRedirect(request.request.META.get('HTTP_REFERER'))
+
+
+class StudentLibrary(AdminPortal):
+    template_name = 'library/student_library.html'

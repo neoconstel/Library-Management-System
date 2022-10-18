@@ -1,8 +1,5 @@
 {% extends 'library/base.html' %}
 
-{% block student-nav %}
-{% endblock student-nav %}
-
 {% block content %}
 <div class="stats">
     <h6>Total number of book titles: {{ total_book_titles }}</h6>
@@ -26,9 +23,16 @@
     <p>(by {{ book.author }})</p>
     <p>Book ID: {{ book.id }}</p>
     <p>{{ book.quantity }} Available</p>
+    {% if user.is_staff %}
     <a class="btn btn-primary" href="{% url 'view-books' book.id %}" role="button">View</a>
     <a class="btn btn-primary" href="{% url 'update-books' book.id %}" role="button">Update</a>
     <a class="btn btn-primary" href="{% url 'delete-books' book.id %}" role="button">Delete</a>
+    <form method="post" action="{% url 'create-order' %}">
+        {% csrf_token %}
+        <input type="text" name="book_id" id="" value="{{ book.id }}" hidden>
+        <input type="text" name="student_id" id="" value="{{ user.id }}" hidden>
+    </form>
+    {% endif %}
 </div>
 {% endfor %}
 
