@@ -5,6 +5,7 @@ DetailView, UpdateView, DeleteView)
 from django.urls import reverse_lazy
 from requests import request
 from django.db.models import Q  # for combining filter queries with &, |
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.contrib.auth.models import User
 from .models import Book, Order, Student
@@ -15,7 +16,7 @@ class Home(TemplateView):
     template_name = 'library/index.html'
 
 
-class BookCreate(CreateView):
+class BookCreate(LoginRequiredMixin, CreateView):
     model = Book
     fields = '__all__'
     success_url = reverse_lazy('admin-portal')
@@ -26,13 +27,13 @@ class BookCreate(CreateView):
         return context
 
 
-class BookDetail(DetailView):
+class BookDetail(LoginRequiredMixin, DetailView):
     model = Book
     fields = '__all__'
     context_object_name = 'book'
 
 
-class BookUpdate(UpdateView):
+class BookUpdate(LoginRequiredMixin, UpdateView):
     model = Book
     fields = '__all__'    
 
@@ -45,14 +46,14 @@ class BookUpdate(UpdateView):
         return context
 
 
-class BookDelete(DeleteView):
+class BookDelete(LoginRequiredMixin, DeleteView):
     model = Book
     context_object_name = 'book'
     success_url = reverse_lazy('admin-portal')
 
 
 
-class AdminPortal(ListView):
+class AdminPortal(LoginRequiredMixin, ListView):
     model = Book
     template_name = 'library/admin_library.html'
     context_object_name = 'books'
@@ -90,25 +91,25 @@ class AdminPortal(ListView):
         return context
 
 
-class StudentPortal(ListView):
+class StudentPortal(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'library/student_portal.html'
     context_object_name = 'orders'
     ordering = ['-id']    
 
 
-class ViewOrders(ListView):
+class ViewOrders(LoginRequiredMixin, ListView):
     model = Order
     context_object_name = 'orders'
 
 
-class OrderDelete(DeleteView):
+class OrderDelete(LoginRequiredMixin, DeleteView):
     model = Order
     context_object_name = 'order'
     success_url = reverse_lazy('student-portal')
 
 
-class OrderCreate(View):
+class OrderCreate(LoginRequiredMixin, View):
 
     def post(request, *args, **kwargs):    
         book_id = request.request.POST.get('book_id')
@@ -127,7 +128,7 @@ class StudentLibrary(AdminPortal):
     template_name = 'library/student_library.html'
 
 
-class LoginRedirectView(View):
+class LoginRedirectView(LoginRequiredMixin, View):
     def get(self, request):
         if self.request.user.is_staff:
             return redirect(reverse_lazy('admin-portal'))
@@ -135,7 +136,7 @@ class LoginRedirectView(View):
             return redirect(reverse_lazy('student-portal'))
 
 
-class SignupView(View):
+class SignupView(LoginRequiredMixin, View):
 
     def get(self, request):
         form = UserSignupForm()
