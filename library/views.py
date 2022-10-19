@@ -1,4 +1,3 @@
-from distutils.command.build_scripts import first_line_re
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import (View, TemplateView, CreateView, ListView,
@@ -8,7 +7,7 @@ from requests import request
 from django.db.models import Q  # for combining filter queries with &, |
 
 from .models import Book, Order, Student
-from .forms import BookForm
+from .forms import BookForm, UserSignupForm
 
 
 class Home(TemplateView):
@@ -133,4 +132,25 @@ class LoginRedirectView(View):
             return redirect(reverse_lazy('admin-portal'))
         else:
             return redirect(reverse_lazy('student-portal'))
-            
+
+
+class SignupView(View):
+
+    def get(self, request):
+        form = UserSignupForm()
+
+        context = {
+            'form': form
+        }
+        return render(request, 'registration/signup.html', context=context)
+
+    
+    def post(self, request):
+        form = UserSignupForm(self.request.POST)
+
+        if form.is_valid():
+            form.save()
+        
+            return redirect('login')
+        
+        return redirect('.')
