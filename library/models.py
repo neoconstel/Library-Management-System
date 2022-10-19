@@ -1,7 +1,8 @@
-from email.policy import default
 from django.db import models
 from django.utils import timezone
 from django.utils.timezone import timedelta
+from django.contrib.auth.models import User
+
 
 BOOK_HOLDING_TIME = timedelta(days=14)
 
@@ -21,6 +22,7 @@ class Book(models.Model):
 class Student(models.Model):
     name = models.CharField(max_length=100)
     credits = models.IntegerField(default=500)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.name
