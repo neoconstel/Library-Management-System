@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from requests import request
 from django.db.models import Q  # for combining filter queries with &, |
 
+from django.contrib.auth.models import User
 from .models import Book, Order, Student
 from .forms import BookForm, UserSignupForm
 
@@ -150,6 +151,11 @@ class SignupView(View):
 
         if form.is_valid():
             form.save()
+            
+            # new user has been added. Create a student instance and assign new user to it
+            newest_user = User.objects.last()
+            new_student = Student(name=newest_user.username, user=newest_user)
+            new_student.save()
         
             return redirect('login')
         
