@@ -1,5 +1,5 @@
 from distutils.command.build_scripts import first_line_re
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import (View, TemplateView, CreateView, ListView,
 DetailView, UpdateView, DeleteView)
@@ -125,3 +125,12 @@ class OrderCreate(View):
 
 class StudentLibrary(AdminPortal):
     template_name = 'library/student_library.html'
+
+
+class LoginRedirectView(View):
+    def get(self, request):
+        if self.request.user.is_staff:
+            return redirect(reverse_lazy('admin-portal'))
+        else:
+            return redirect(reverse_lazy('student-portal'))
+            
