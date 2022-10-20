@@ -58,7 +58,7 @@ class AdminPortal(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'library/admin_library.html'
     context_object_name = 'books'
     ordering = '-id'
-    permission_required = 'library.view_order'
+    permission_required = 'auth.is_librarian'
 
 
     def get_queryset(self):
@@ -96,7 +96,7 @@ class StudentPortal(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'library/student_portal.html'
     context_object_name = 'orders'
-    ordering = ['-id']    
+    ordering = ['-id']
 
 
 class ViewOrders(LoginRequiredMixin, ListView):
@@ -126,7 +126,8 @@ class OrderCreate(LoginRequiredMixin, View):
 
 
 class StudentLibrary(AdminPortal):
-    template_name = 'library/student_library.html'
+    template_name = 'library/student_library.html'    
+    permission_required = 'auth.is_student'
 
 
 class LoginRedirectView(LoginRequiredMixin, View):
