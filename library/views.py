@@ -5,7 +5,7 @@ DetailView, UpdateView, DeleteView)
 from django.urls import reverse_lazy
 from requests import request
 from django.db.models import Q  # for combining filter queries with &, |
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from django.contrib.auth.models import User
 from .models import Book, Order, Student
@@ -53,11 +53,12 @@ class BookDelete(LoginRequiredMixin, DeleteView):
 
 
 
-class AdminPortal(LoginRequiredMixin, ListView):
+class AdminPortal(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Book
     template_name = 'library/admin_library.html'
     context_object_name = 'books'
     ordering = '-id'
+    permission_required = 'library.view_order'
 
 
     def get_queryset(self):
