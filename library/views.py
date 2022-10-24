@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from .models import Book, Order, Student
 from .forms import BookForm, UserSignupForm
+from django.contrib.auth.models import Group
 
 # permission -- with object-level support
 from rules.contrib.views import PermissionRequiredMixin
@@ -159,8 +160,15 @@ class SignupView(View):
         if form.is_valid():
             form.save()
             
-            # new user has been added. Create a student instance and assign new user to it
+            # new user has been added. get and add a student profile to it
             newest_user = User.objects.last()
+
+            # add the new user to a permission group
+            student_group = Group.objects.get(name='Student')
+            newest_user.groups.add(student_group)
+            newest_user.save()
+
+            # Create a student instance and assign new user to it
             new_student = Student(name=newest_user.username, user=newest_user)
             new_student.save()
         
