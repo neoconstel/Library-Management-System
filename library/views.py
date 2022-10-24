@@ -117,17 +117,17 @@ class OrderDelete(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
 
 class OrderCreate(LoginRequiredMixin, View):
 
-    def post(request, *args, **kwargs):    
-        book_id = request.request.POST.get('book_id')
-        student_id = request.request.POST.get('student_id')
+    def post(self, request):    
+        book_id = request.POST.get('book_id')
+        user_id = request.POST.get('user_id')
         new_order = Order(
             book = Book.objects.get(id=book_id),
-            student = Student.objects.get(id=student_id)
+            student = User.objects.get(id=user_id).student
         )
         new_order.save()
 
         # redirect back to page that made initial request
-        return HttpResponseRedirect(request.request.META.get('HTTP_REFERER'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class StudentLibrary(AdminPortal):

@@ -18,7 +18,7 @@
     <form method="post" action="{% url 'create-order' %}">
         {% csrf_token %}
         <input type="text" name="book_id" id="" value="{{ book.id }}" hidden>
-        <input type="text" name="student_id" id="" value="{{ user.id }}" hidden>
+        <input type="text" name="user_id" id="" value="{{ user.id }}" hidden>
         <button type="submit" class="btn btn-primary">Rent Book (${{ book.cost }})</button>
     </form>
 </div>
