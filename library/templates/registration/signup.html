@@ -12,5 +12,6 @@
     {{ form.password1.label }}{{ form.password1 }} <br>
     {{ form.password2.label }}{{ form.password2 }} <br>
     <button type="submit">Signup</button>
+    <p>Have an account already? <a href="{% url 'login' %}">Login</a></p>
 </form>
 {% endblock content %}

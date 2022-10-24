@@ -142,7 +142,7 @@ class LoginRedirectView(LoginRequiredMixin, View):
             return redirect(reverse_lazy('student-portal'))
 
 
-class SignupView(LoginRequiredMixin, View):
+class SignupView(View):
 
     def get(self, request):
         form = UserSignupForm()
