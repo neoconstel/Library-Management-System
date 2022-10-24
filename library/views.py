@@ -5,11 +5,14 @@ DetailView, UpdateView, DeleteView)
 from django.urls import reverse_lazy
 from requests import request
 from django.db.models import Q  # for combining filter queries with &, |
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.contrib.auth.models import User
 from .models import Book, Order, Student
 from .forms import BookForm, UserSignupForm
+
+# permission -- with object-level support
+from rules.contrib.views import PermissionRequiredMixin
 
 
 class Home(TemplateView):
@@ -50,7 +53,6 @@ class BookDelete(LoginRequiredMixin, DeleteView):
     model = Book
     context_object_name = 'book'
     success_url = reverse_lazy('admin-portal')
-
 
 
 class AdminPortal(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -104,10 +106,12 @@ class ViewOrders(LoginRequiredMixin, ListView):
     context_object_name = 'orders'
 
 
-class OrderDelete(LoginRequiredMixin, DeleteView):
+class OrderDelete(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     model = Order
     context_object_name = 'order'
     success_url = reverse_lazy('student-portal')
+
+    permission_required = 'library.delete_order'
 
 
 class OrderCreate(LoginRequiredMixin, View):

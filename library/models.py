@@ -3,17 +3,28 @@ from django.utils import timezone
 from django.utils.timezone import timedelta
 from django.contrib.auth.models import User
 
+# for implementing object permission rules
+from rules.contrib.models import RulesModel
+from . import permissions
+
 
 BOOK_HOLDING_TIME = timedelta(days=14)
 
 
 # Create your models here.
-class Book(models.Model):
+class Book(RulesModel):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
     theme = models.CharField(max_length=100)
     cost = models.IntegerField()
     quantity = models.IntegerField()
+
+    # object-level permissions
+    class Meta:
+        rules_permissions = {
+            'add': permissions.rules.is_staff,
+            'read': permissions.rules.is_authenticated
+        }
 
     def __str__(self):
         return f"{self.title} by {self.author}"
@@ -28,11 +39,18 @@ class Student(models.Model):
         return self.name
 
 
-class Order(models.Model):
+class Order(RulesModel):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     issue_date = models.DateTimeField(default=timezone.now)
     expiry_date = models.DateTimeField(default=timezone.now)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    # object-level permissions
+    class Meta:
+        rules_permissions = {
+            'change': permissions.is_order_creator,  # create perm: "<app>.change_order" from predicate
+            'delete': permissions.is_order_creator
+        }
 
     def __str__(self):
         return f"Order: {self.book.title}. Author: {self.book.author}. \
