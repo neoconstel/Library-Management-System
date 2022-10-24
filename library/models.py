@@ -23,7 +23,7 @@ class Book(RulesModel):
     class Meta:
         rules_permissions = {
             'add': permissions.rules.is_staff,
-            'read': permissions.rules.is_authenticated
+            'read': permissions.is_staff_or_with_book
         }
 
     def __str__(self):

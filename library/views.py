@@ -31,10 +31,12 @@ class BookCreate(LoginRequiredMixin, CreateView):
         return context
 
 
-class BookDetail(LoginRequiredMixin, DetailView):
+class BookDetail(PermissionRequiredMixin, LoginRequiredMixin, DetailView):
     model = Book
     fields = '__all__'
     context_object_name = 'book'
+
+    permission_required = 'library.read_book'
 
 
 class BookUpdate(LoginRequiredMixin, UpdateView):
