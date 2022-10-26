@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.timezone import timedelta
 from django.contrib.auth.models import User
+import random
 
 # for implementing object permission rules
 from rules.contrib.models import RulesModel
@@ -18,6 +19,7 @@ class Book(RulesModel):
     theme = models.CharField(max_length=100)
     cost = models.IntegerField()
     quantity = models.IntegerField()
+    content = models.TextField(null=True, blank=True)
 
     # object-level permissions
     class Meta:
@@ -28,6 +30,11 @@ class Book(RulesModel):
 
     def __str__(self):
         return f"{self.title} by {self.author}"
+
+    def save(self, *args, **kwargs):
+        # fill content with random data
+        self.content = f"Chapter 1 of {self.title}: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+        super().save(*args, **kwargs)
 
 
 class Student(models.Model):

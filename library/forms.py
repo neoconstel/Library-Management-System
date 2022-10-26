@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 class BookForm(ModelForm):
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = ['title', 'author', 'theme', 'cost', 'quantity']
 
 
 class UserSignupForm(UserCreationForm):
