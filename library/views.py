@@ -134,7 +134,7 @@ class OrderCreate(LoginRequiredMixin, View):
 
 class StudentLibrary(AdminPortal):
     template_name = 'library/student_library.html'    
-    permission_required = 'auth.is_student'
+    permission_required = 'library.is_student'
 
 
 class LoginRedirectView(LoginRequiredMixin, View):
