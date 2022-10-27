@@ -12,26 +12,33 @@ class LibraryConfig(AppConfig):
         from django.contrib.auth.models import Permission
         from django.contrib.contenttypes.models import ContentType
         from .models import User
+        from django.db.utils import OperationalError
 
-        # create custom permissions
 
-        usercontent_type = ContentType.objects.get_for_model(User)
+        # do these only after initial migrations to avoid error
+        try:
+            usercontent_type = ContentType.objects.get_for_model(User)
 
-        if not Permission.objects.filter(codename='is_student').exists():       
-            student_permission = Permission.objects.create(
-            codename='is_student',
-            name='This User Is a Student',
-            content_type=usercontent_type,
-            )
+        except OperationalError:
+            print("contenttype operations witheld until after migrations")
 
-        # create user groups
+        else:
+            # create custom permissions
+            if not Permission.objects.filter(codename='is_student').exists():       
+                student_permission = Permission.objects.create(
+                codename='is_student',
+                name='This User Is a Student',
+                content_type=usercontent_type,
+                )
 
-        if not Group.objects.filter(name='Student').exists():
-            student_permission = Permission.objects.get(codename='is_student')
+            # create user groups
 
-            student_group = Group.objects.create(name='Student')            
-            student_group.permissions.add(student_permission)
-            student_group.save()
+            if not Group.objects.filter(name='Student').exists():
+                student_permission = Permission.objects.get(codename='is_student')
+
+                student_group = Group.objects.create(name='Student')            
+                student_group.permissions.add(student_permission)
+                student_group.save()
 
 
         return super().ready()
