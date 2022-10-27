@@ -7,7 +7,7 @@ from requests import request
 from django.db.models import Q  # for combining filter queries with &, |
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.contrib.auth.models import User
+from .models import User
 from .models import Book, Order, Student
 from .forms import BookForm, UserSignupForm
 from django.contrib.auth.models import Group
@@ -164,6 +164,7 @@ class SignupView(View):
             
             # new user has been added. get and add a student profile to it
             newest_user = User.objects.last()
+
 
             # add the new user to a permission group
             student_group = Group.objects.get(name='Student')

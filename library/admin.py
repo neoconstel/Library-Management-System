@@ -11,3 +11,4 @@ class BookAdmin(ObjectPermissionsModelAdmin):
 admin.site.register(models.Book, BookAdmin)
 admin.site.register(models.Student)
 admin.site.register(models.Order)
+admin.site.register(models.User)

@@ -1,8 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.timezone import timedelta
-from django.contrib.auth.models import User
-import random
+from django.contrib.auth.models import AbstractUser
 
 # for implementing object permission rules
 from rules.contrib.models import RulesModel
@@ -13,6 +12,11 @@ BOOK_HOLDING_TIME = timedelta(days=14)
 
 
 # Create your models here.
+
+class User(AbstractUser):
+    pass
+
+
 class Book(RulesModel):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
