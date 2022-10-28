@@ -1,3 +1,4 @@
+from urllib import response
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import (View, TemplateView, CreateView, ListView,
@@ -80,7 +81,7 @@ class AdminPortal(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             return filtered_query
         else:
             # return this query if search field is empty (e.g on page load)
-            return self.model.objects.order_by(self.ordering).all()  # or None, depending on preference
+            return Book.objects.order_by(self.ordering).all()
 
 
     def get_context_data(self, **kwargs):
@@ -102,6 +103,7 @@ class StudentPortal(LoginRequiredMixin, ListView):
     template_name = 'library/student_portal.html'
     context_object_name = 'orders'
     ordering = ['-id']
+
 
 
 class ViewOrders(LoginRequiredMixin, ListView):
@@ -135,6 +137,29 @@ class OrderCreate(LoginRequiredMixin, View):
 class StudentLibrary(AdminPortal):
     template_name = 'library/student_library.html'    
     permission_required = 'library.is_student'
+
+
+    def get_queryset(self):
+        # get the search term from a form in the template, submitted with GET method
+        search_term = self.request.GET.get('search_field')
+
+        student = Student.objects.get(user=self.request.user)
+        student_orders = Order.objects.filter(student=student)
+        student_rented_book_ids = (order.book.id for order in student_orders)
+        student_unrented_books = Book.objects.filter(~Q(id__in=student_rented_book_ids))
+
+        if search_term:
+            # filter example format: <model field>__icontains=<search term>
+            filtered_query = student_unrented_books.filter(                
+                Q(author__istartswith=search_term) 
+                | Q(title__icontains=search_term)
+                | Q(id__iexact=search_term)
+                ).order_by(self.ordering).all()
+            return filtered_query
+        else:
+            # return this query if search field is empty (e.g on page load)
+            return student_unrented_books.all()
+
 
 
 class LoginRedirectView(LoginRequiredMixin, View):
