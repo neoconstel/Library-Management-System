@@ -124,11 +124,20 @@ class OrderCreate(LoginRequiredMixin, View):
     def post(self, request):    
         book_id = request.POST.get('book_id')
         user_id = request.POST.get('user_id')
-        new_order = Order(
-            book = Book.objects.get(id=book_id),
-            student = User.objects.get(id=user_id).student
-        )
-        new_order.save()
+
+        student = Student.objects.get(user=self.request.user)
+
+        has_rented_book_already = Order.objects.filter(
+            Q(id=book_id) & Q(student=student)
+        ).exists()
+
+        if not has_rented_book_already:
+
+            new_order = Order(
+                book = Book.objects.get(id=book_id),
+                student = User.objects.get(id=user_id).student
+            )
+            new_order.save()
 
         # redirect back to page that made initial request
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
