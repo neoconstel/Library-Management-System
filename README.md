@@ -6,10 +6,11 @@ A demo app simulating some operations for the management of an online library
 - Basic User Authentication
 - ClassViews and Mixins
 - User Permissions:
-> at model-level (general user permissions)
-> at object-level (so users have individual/private access specific to their own account)
+>- at model-level (general user permissions)
+
+>- at object-level (so users have individual/private access specific to their own account)
 - User groups
 - Custom Permissions
 - Custom User Model (Simple case: via AbstractUser)
-- Startup Script
+- Startup Script (Perform tasks at startup, e.g creating groups and custom permissions if they don't exist)
 
