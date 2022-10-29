@@ -1,8 +1,8 @@
 project_planning.txt
-db.sqlite3
 __pycache__
 .env
 venv
 *.pyc
 backup
 TODO.txt
+.fuse_hidden*

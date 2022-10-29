@@ -17,4 +17,9 @@ A demo app simulating some operations for the management of an online library
 
 ## Further Notes
 - the project currently has a secret key exposed within it. it is left there intentionally and isn't used in production
+- an sqlite database has been included as well with sample data, and a default superuser account with details:
+>- username: neoconstel
 
+>- password: password
+
+> the superuser account can be used to explore the librarian section, which is restricted only for staff accounts
