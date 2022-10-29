@@ -16,12 +16,37 @@
     <h6>{{book.title}}</h6>
     <p>(by {{ book.author }})</p>
     <p>Book ID: {{ book.id }}</p>
-    <form method="post" action="{% url 'create-order' %}">
-        {% csrf_token %}
-        <input type="text" name="book_id" id="" value="{{ book.id }}" hidden>
-        <input type="text" name="user_id" id="" value="{{ user.id }}" hidden>
-        <button type="submit" class="btn btn-primary">Rent Book (${{ book.cost }})</button>
-    </form>
+
+    <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ book.id }}">
+    Rent Book (${{ book.cost }})
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal-{{ book.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{book.title}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          This would cost you ${{ book.cost }}. Proceed?
+        </div>
+        <div class="modal-footer">          
+          <form method="post" action="{% url 'create-order' %}">
+            {% csrf_token %}
+            <input type="text" name="book_id" id="" value="{{ book.id }}" hidden>
+            <input type="text" name="user_id" id="" value="{{ user.id }}" hidden>
+            <button type="submit" class="btn btn-primary">Yes, Rent Book (${{ book.cost }})</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
 </div>
 {% endfor %}
 
