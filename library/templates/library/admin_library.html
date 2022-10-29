@@ -21,6 +21,7 @@
 <div class="book">
     <h6>{{book.title}}</h6>
     <p>(by {{ book.author }})</p>
+    <p>Theme: {{ book.theme }}</p>
     <p>Book ID: {{ book.id }}</p>
     <p>{{ book.quantity }} Available</p>
     {% if user.is_staff %}
