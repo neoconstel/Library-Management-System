@@ -74,9 +74,10 @@ class AdminPortal(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         if search_term:
             # filter example format: <model field>__icontains=<search term>
             filtered_query = self.model.objects.filter(
-                Q(author__istartswith=search_term) 
+                Q(author__icontains=search_term) 
                 | Q(title__icontains=search_term)
                 | Q(id__iexact=search_term)
+                | Q(theme__icontains=search_term)
                 ).order_by(self.ordering).all()
             return filtered_query
         else:
@@ -162,9 +163,10 @@ class StudentLibrary(AdminPortal):
         if search_term:
             # filter example format: <model field>__icontains=<search term>
             filtered_query = student_unrented_books.filter(                
-                Q(author__istartswith=search_term) 
+                Q(author__icontains=search_term) 
                 | Q(title__icontains=search_term)
                 | Q(id__iexact=search_term)
+                | Q(theme__icontains=search_term)
                 ).order_by(self.ordering).all()
             return filtered_query
         else:
