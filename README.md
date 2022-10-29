@@ -23,3 +23,4 @@ A demo app simulating some operations for the management of an online library
 >- password: password
 
 > the superuser account can be used to explore the librarian section, which is restricted only for staff accounts
+
