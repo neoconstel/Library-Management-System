@@ -12,5 +12,6 @@ A demo app simulating some operations for the management of an online library
 - User groups
 - Custom Permissions
 - Custom User Model (Simple case: via AbstractUser)
+- global search and custom queryset
 - Startup Script (Perform tasks at startup, e.g creating groups and custom permissions if they don't exist)
 
