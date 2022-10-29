@@ -127,11 +127,13 @@ class OrderCreate(LoginRequiredMixin, View):
 
         student = Student.objects.get(user=self.request.user)
 
-        has_rented_book_already = Order.objects.filter(
+        user_has_rented_book_already = Order.objects.filter(
             Q(id=book_id) & Q(student=student)
         ).exists()
 
-        if not has_rented_book_already:
+        number_of_this_book_available = Book.objects.get(id=book_id).quantity
+
+        if number_of_this_book_available > 0 and not user_has_rented_book_already:
 
             new_order = Order(
                 book = Book.objects.get(id=book_id),
