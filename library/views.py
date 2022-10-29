@@ -171,7 +171,7 @@ class StudentLibrary(AdminPortal):
             return filtered_query
         else:
             # return this query if search field is empty (e.g on page load)
-            return student_unrented_books.all()
+            return student_unrented_books.order_by(self.ordering).all()
 
 
 
