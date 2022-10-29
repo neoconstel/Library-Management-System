@@ -6,3 +6,5 @@ venv
 backup
 TODO.txt
 .fuse_hidden*
+db.sqlite3
+
