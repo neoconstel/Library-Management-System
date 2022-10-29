@@ -15,3 +15,6 @@ A demo app simulating some operations for the management of an online library
 - global search and custom queryset
 - Startup Script (Perform tasks at startup, e.g creating groups and custom permissions if they don't exist)
 
+## Further Notes
+- the project currently has a secret key exposed within it. it is left there intentionally and isn't used in production
+
