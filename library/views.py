@@ -24,7 +24,7 @@ class Home(TemplateView):
 class BookCreate(LoginRequiredMixin, CreateView):
     model = Book
     fields = '__all__'
-    success_url = reverse_lazy('admin-portal')
+    success_url = reverse_lazy('admin-library')
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
@@ -56,10 +56,10 @@ class BookUpdate(LoginRequiredMixin, UpdateView):
 class BookDelete(LoginRequiredMixin, DeleteView):
     model = Book
     context_object_name = 'book'
-    success_url = reverse_lazy('admin-portal')
+    success_url = reverse_lazy('admin-library')
 
 
-class AdminPortal(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class AdminLibrary(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Book
     template_name = 'library/admin_library.html'
     context_object_name = 'books'
@@ -99,7 +99,7 @@ class AdminPortal(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return context
 
 
-class StudentPortal(LoginRequiredMixin, ListView):
+class StudentCollections(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'library/student_portal.html'
     context_object_name = 'orders'
@@ -115,7 +115,7 @@ class ViewOrders(LoginRequiredMixin, ListView):
 class OrderDelete(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     model = Order
     context_object_name = 'order'
-    success_url = reverse_lazy('student-portal')
+    success_url = reverse_lazy('student-collections')
 
     permission_required = 'library.delete_order'
 
@@ -146,7 +146,7 @@ class OrderCreate(LoginRequiredMixin, View):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-class StudentLibrary(AdminPortal):
+class StudentLibrary(AdminLibrary):
     template_name = 'library/student_library.html'    
     permission_required = 'library.is_student'
 
@@ -178,9 +178,9 @@ class StudentLibrary(AdminPortal):
 class LoginRedirectView(LoginRequiredMixin, View):
     def get(self, request):
         if self.request.user.is_staff:
-            return redirect(reverse_lazy('admin-portal'))
+            return redirect(reverse_lazy('admin-library'))
         else:
-            return redirect(reverse_lazy('student-portal'))
+            return redirect(reverse_lazy('student-collections'))
 
 
 class SignupView(View):

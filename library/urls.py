@@ -10,7 +10,7 @@ urlpatterns = [
 
 
     path('', views.Home.as_view(), name='home'),
-    path('library/management', views.AdminPortal.as_view(), name='admin-portal'),
+    path('library/management', views.AdminLibrary.as_view(), name='admin-library'),
     path('library/add-books/', views.BookCreate.as_view(), name='add-books'),
     path('library/view-books/<int:pk>/', views.BookDetail.as_view(), name='view-books'),
     path('library/update-books/<int:pk>/', views.BookUpdate.as_view(), name='update-books'),
@@ -18,7 +18,7 @@ urlpatterns = [
     path('library/view-orders/', views.ViewOrders.as_view(), name='view-orders'),
 
 
-    path('student/dashboard', views.StudentPortal.as_view(), name='student-portal'),
+    path('student/dashboard', views.StudentCollections.as_view(), name='student-collections'),
     path('student/create-order/', views.OrderCreate.as_view(), name='create-order'),
     path('student/delete-order/<int:pk>/', views.OrderDelete.as_view(), name='delete-order'),
     path('student/student-library', views.StudentLibrary.as_view(), name='student-library')
