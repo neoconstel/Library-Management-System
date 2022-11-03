@@ -59,7 +59,7 @@ class BookDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('admin-library')
 
 
-class AdminLibrary(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class Library(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Book
     template_name = 'library/admin_library.html'
     context_object_name = 'books'
@@ -71,9 +71,23 @@ class AdminLibrary(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         # get the search term from a form in the template, submitted with GET method
         search_term = self.request.GET.get('search_field')
 
+        user = self.request.user
+
+        # query from all books
+        query_source = self.model.objects
+
+        if not user.is_staff:
+            student = Student.objects.get(user=user)
+            student_orders = Order.objects.filter(student=student)
+            student_rented_book_ids = (order.book.id for order in student_orders)
+            student_unrented_books = Book.objects.filter(~Q(id__in=student_rented_book_ids))
+
+            # query from only books not rented by this student
+            query_source = student_unrented_books
+
         if search_term:
             # filter example format: <model field>__icontains=<search term>
-            filtered_query = self.model.objects.filter(
+            filtered_query = query_source.filter(
                 Q(author__icontains=search_term) 
                 | Q(title__icontains=search_term)
                 | Q(id__iexact=search_term)
@@ -82,7 +96,7 @@ class AdminLibrary(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             return filtered_query
         else:
             # return this query if search field is empty (e.g on page load)
-            return Book.objects.order_by(self.ordering).all()
+            return query_source.order_by(self.ordering).all()
 
 
     def get_context_data(self, **kwargs):
@@ -146,33 +160,9 @@ class OrderCreate(LoginRequiredMixin, View):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-class StudentLibrary(AdminLibrary):
+class StudentLibrary(Library):
     template_name = 'library/student_library.html'    
     permission_required = 'library.is_student'
-
-
-    def get_queryset(self):
-        # get the search term from a form in the template, submitted with GET method
-        search_term = self.request.GET.get('search_field')
-
-        student = Student.objects.get(user=self.request.user)
-        student_orders = Order.objects.filter(student=student)
-        student_rented_book_ids = (order.book.id for order in student_orders)
-        student_unrented_books = Book.objects.filter(~Q(id__in=student_rented_book_ids))
-
-        if search_term:
-            # filter example format: <model field>__icontains=<search term>
-            filtered_query = student_unrented_books.filter(                
-                Q(author__icontains=search_term) 
-                | Q(title__icontains=search_term)
-                | Q(id__iexact=search_term)
-                | Q(theme__icontains=search_term)
-                ).order_by(self.ordering).all()
-            return filtered_query
-        else:
-            # return this query if search field is empty (e.g on page load)
-            return student_unrented_books.order_by(self.ordering).all()
-
 
 
 class LoginRedirectView(LoginRequiredMixin, View):
