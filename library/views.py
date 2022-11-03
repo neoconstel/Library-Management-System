@@ -74,20 +74,22 @@ class Library(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         user = self.request.user
 
         # query from all books
-        query_source = self.model.objects
+        query = self.model.objects
 
         if not user.is_staff:
             student = Student.objects.get(user=user)
             student_orders = Order.objects.filter(student=student)
             student_rented_book_ids = (order.book.id for order in student_orders)
-            student_unrented_books = Book.objects.filter(~Q(id__in=student_rented_book_ids))
+            available_books = query.filter(quantity__gt=0) # quantity > 0
+            student_unrented_books = available_books.filter(
+                                ~Q(id__in=student_rented_book_ids))
 
-            # query from only books not rented by this student
-            query_source = student_unrented_books
+            # query from only AVAILABLE books which are not rented by this student
+            query = student_unrented_books
 
         if search_term:
             # filter example format: <model field>__icontains=<search term>
-            filtered_query = query_source.filter(
+            filtered_query = query.filter(
                 Q(author__icontains=search_term) 
                 | Q(title__icontains=search_term)
                 | Q(id__iexact=search_term)
@@ -96,7 +98,7 @@ class Library(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             return filtered_query
         else:
             # return this query if search field is empty (e.g on page load)
-            return query_source.order_by(self.ordering).all()
+            return query.order_by(self.ordering).all()
 
 
     def get_context_data(self, **kwargs):
